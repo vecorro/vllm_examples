@@ -122,5 +122,5 @@ if __name__ == "__main__":
     # see https://vllm.readthedocs.io/en/latest/getting_started/installation.html
     # for more details.
     deployment = VLLMPredictDeployment.bind(model="facebook/opt-125m")
-    serve.run(deployment)
-    send_sample_request()
+    #serve.run(deployment)
+    #send_sample_request()
