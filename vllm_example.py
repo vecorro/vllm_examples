@@ -113,7 +113,7 @@ def send_sample_request():
         print(line.decode("utf-8"))
 
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # To run this example, you need to install vllm which requires
     # OS: Linux
     # Python: 3.8 or higher
@@ -121,6 +121,6 @@ if __name__ == "__main__":
     # GPU: compute capability 7.0 or higher (e.g., V100, T4, RTX20xx, A100, L4, etc.)
     # see https://vllm.readthedocs.io/en/latest/getting_started/installation.html
     # for more details.
-    deployment = VLLMPredictDeployment.bind(model="facebook/opt-125m")
+deployment = VLLMPredictDeployment.bind(model="facebook/opt-125m")
     #serve.run(deployment)
     #send_sample_request()
