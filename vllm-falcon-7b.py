@@ -8,7 +8,6 @@ from vllm.engine.arg_utils import AsyncEngineArgs
 from vllm.engine.async_llm_engine import AsyncLLMEngine
 from vllm.sampling_params import SamplingParams
 from vllm.utils import random_uuid
-import re
 from ray import serve
 
 
@@ -124,13 +123,8 @@ def send_sample_request():
     for line in output.iter_lines():
         print(json.loads(line.decode("utf-8"))['text'][0])
 
-    # To run this example, you need to install vllm which requires
-    # OS: Linux
-    # Python: 3.8 or higher
-    # CUDA: 11.0 – 11.8
-    # GPU: compute capability 7.0 or higher (e.g., V100, T4, RTX20xx, A100, L4, etc.)
-    # see https://vllm.readthedocs.io/en/latest/getting_started/installation.html
-    # for more details.
+
+# Deployment definition for Ray Serve
 deployment = VLLMPredictDeployment.bind(model="tiiuae/falcon-7b",
                                             dtype="bfloat16",
                                             trust_remote_code=True,

@@ -112,15 +112,15 @@ def send_sample_request():
     for line in output.iter_lines():
         print(line.decode("utf-8"))
 
+# To run this example, you need to install vllm which requires
+# OS: Linux
+# Python: 3.8 or higher
+# CUDA: 11.0 – 11.8
+# GPU: compute capability 7.0 or higher (e.g., V100, T4, RTX20xx, A100, L4, etc.)
+# see https://vllm.readthedocs.io/en/latest/getting_started/installation.html
+# for more details.
 
-#if __name__ == "__main__":
-    # To run this example, you need to install vllm which requires
-    # OS: Linux
-    # Python: 3.8 or higher
-    # CUDA: 11.0 – 11.8
-    # GPU: compute capability 7.0 or higher (e.g., V100, T4, RTX20xx, A100, L4, etc.)
-    # see https://vllm.readthedocs.io/en/latest/getting_started/installation.html
-    # for more details.
-deployment = VLLMPredictDeployment.bind(model="facebook/opt-125m")
-    #serve.run(deployment)
-    #send_sample_request()
+if __name__ == "__main__":
+    deployment = VLLMPredictDeployment.bind(model="facebook/opt-125m")
+    serve.run(deployment)
+    send_sample_request()
