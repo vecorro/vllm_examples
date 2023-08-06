@@ -11,9 +11,9 @@ spec:
         import_path: vllm-falcon-7b:deployment
         runtime_env:
           working_dir: "https://github.com/vecorro/vllm_examples/archive/refs/heads/main.zip"
-          pip: ["vllm"]
+          pip: ["vllm==0.1.2"]
   rayClusterConfig:
-    rayVersion: '2.6.1' # Should match the Ray version in the image of the containers
+    rayVersion: '2.5.1' # Should match the Ray version in the image of the containers
     ######################headGroupSpecs#################################
     # Ray head pod template.
     headGroupSpec:
@@ -28,7 +28,7 @@ spec:
         spec:
           containers:
           - name: ray-head
-            image: rayproject/ray-ml:latest-py39-cu118
+            image: rayproject/ray:2.5.1-py310-cu118
             ports:
             - containerPort: 6379
               name: gcs
@@ -63,7 +63,7 @@ spec:
         spec:
           containers:
           - name: ray-worker
-            image: rayproject/ray-ml:latest-py39-cu118
+            image: rayproject/ray:2.5.1-py310-cu118
             resources:
               limits:
                 cpu: 16
