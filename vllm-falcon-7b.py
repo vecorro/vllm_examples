@@ -1,3 +1,12 @@
+"""
+Example of a vLLM prompt completion service based on the Falcon-7b LLM
+to get deployed on Ray Serve.
+
+Adapted from the AnyScale team's repository
+https://github.com/ray-project/ray/blob\
+/cc983fc3e64c1ba215e981a43dd0119c03c74ff1/doc/source/serve/doc_code/vllm_example.py
+"""
+
 import json
 from typing import AsyncGenerator
 
@@ -117,9 +126,9 @@ def send_sample_request():
                     "max_tokens": 128,
                     "temperature": 0,
                     }
-    ray_url = ""http://localhost:8000/""
+    # Replace the hostname with Ray head's hostname or IP address
+    ray_url = "http://localhost:8000/"
     output = requests.post(ray_url, json=sample_input)
-    resp = []
     for line in output.iter_lines():
         print(json.loads(line.decode("utf-8"))['text'][0])
 

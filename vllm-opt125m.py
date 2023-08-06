@@ -1,3 +1,11 @@
+"""
+Example of a vLLM prompt completion service based on the OPT-125M language model
+to get deployed on Ray Serve.
+
+Adapted from the AnyScale team's repository
+https://github.com/ray-project/ray/blob\
+/cc983fc3e64c1ba215e981a43dd0119c03c74ff1/doc/source/serve/doc_code/vllm_example.py
+"""
 import json
 from typing import AsyncGenerator
 
@@ -107,10 +115,12 @@ def send_sample_request():
     import requests
 
     prompt = "How do I cook fried rice?"
-    sample_input = {"prompt": prompt, "stream": True}
-    output = requests.post("http://localhost:8000/", json=sample_input)
+    sample_input = {"prompt": prompt, "stream": False}
+    # Replace the hostname with Ray head's hostname or IP address
+    ray_url = "http://localhost:8000/"
+    output = requests.post(ray_url, json=sample_input)
     for line in output.iter_lines():
-        print(line.decode("utf-8"))
+        print(json.loads(line.decode("utf-8"))['text'][0])
 
 # To run this example, you need to install vllm which requires
 # OS: Linux
@@ -120,7 +130,4 @@ def send_sample_request():
 # see https://vllm.readthedocs.io/en/latest/getting_started/installation.html
 # for more details.
 
-if __name__ == "__main__":
-    deployment = VLLMPredictDeployment.bind(model="facebook/opt-125m")
-    serve.run(deployment)
-    send_sample_request()
+deployment = VLLMPredictDeployment.bind(model="facebook/opt-125m")
