@@ -19,7 +19,6 @@ from vllm.sampling_params import SamplingParams
 from vllm.utils import random_uuid
 from ray import serve
 
-
 @serve.deployment(ray_actor_options={"num_gpus": 1})
 class VLLMPredictDeployment:
     def __init__(self, **kwargs):
@@ -138,4 +137,3 @@ deployment = VLLMPredictDeployment.bind(model="tiiuae/falcon-7b",
                                             dtype="bfloat16",
                                             trust_remote_code=True,
                                             )
-
