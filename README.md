@@ -85,8 +85,8 @@ spec:
 - Here some remarks about the service definition:
     - We increased `serviceUnhealthySecondThreshold` and `deploymentUnhealthySecondThreshold` to give Ray sufficient time
   to install vLLM on a virtual working environment. vLLM can cate between >15 minutes to install.
-    - `working_dir`is set to the URL of the compressed version of this Github repo. Ray will use this URL to pull the Python code<br>
-  that implements the vLLM service.
+    - `working_dir`is set to the URL of the compressed version of this Github repo. Ray will use this URL to pull the Python
+  code that implements the vLLM service.
     - We use vLLM 0.1.3 to create the Ray working env.
     - `import_path` is set to the proper `module:object` for Ray Serve to get the service definition. In this case <br>
   the `module` is the `vllm_falcon_7b.py` Python script and `deployment` is a `serve.deployment.bind()`<br>
