@@ -69,7 +69,7 @@ kubectl get svc
 # vllm-raycluster-vphmv-head-svc   LoadBalancer   10.110.93.143   172.29.214.16   10001:30859/TCP,8265:30939/TCP,52365:32230/TCP,6379:31806/TCP,8080:31088/TCP,8000:31758/TCP   18m
 ````
 
-- The `ray-service.vllm.yaml` manifest has a section hat defines the vLLM service deployment:
+- The `ray-service.vllm.yaml` manifest has a section that defines the vLLM service deployment:
 ````
 spec:
   serviceUnhealthySecondThreshold: 3600 # Config for the health check threshold for service. Default value is 60.
@@ -83,11 +83,11 @@ spec:
           pip: ["vllm==0.1.3"]
 ````
 - Here some remarks about the service definition:
-    - We increased `serviceUnhealthySecondThreshold` and `deploymentUnhealthySecondThreshold` to give Ray sufficient time <br>
+    - We increased `serviceUnhealthySecondThreshold` and `deploymentUnhealthySecondThreshold` to give Ray sufficient time
   to install vLLM on a virtual working environment. vLLM can cate between >15 minutes to install.
     - `working_dir`is set to the URL of the compressed version of this Github repo. Ray will use this URL to pull the Python code<br>
   that implements the vLLM service.
     - We use vLLM 0.1.3 to create the Ray working env.
     - `import_path` is set to the proper `module:object` for Ray Serve to get the service definition. In this case <br>
-  the `module` is the `vllm_falcon_7b.py` Python script and `deployment` is an `serve.deployment.bind()`<br>
+  the `module` is the `vllm_falcon_7b.py` Python script and `deployment` is a `serve.deployment.bind()`<br>
   object type defined inside that script.
