@@ -84,7 +84,7 @@ spec:
 ````
 - Here some remarks about the service definition:
     - We increased `serviceUnhealthySecondThreshold` and `deploymentUnhealthySecondThreshold` to give Ray sufficient time
-  to install vLLM on a virtual working environment. vLLM can cate between >15 minutes to install.
+  to install vLLM on a virtual working environment. vLLM can take >15 minutes to install.
     - `working_dir`is set to the URL of the compressed version of this Github repo. Ray will use this URL to pull the Python
   code that implements the vLLM service.
     - We use vLLM 0.1.3 to create the Ray working env.
