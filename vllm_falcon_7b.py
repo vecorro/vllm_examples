@@ -118,6 +118,7 @@ def send_sample_request():
     :return: None
     """
     import requests
+    import json
 
     prompt = "How do I cook fried rice?"
     sample_input = {"prompt": prompt,
@@ -133,7 +134,7 @@ def send_sample_request():
 
 
 # Deployment definition for Ray Serve
-deployment = VLLMPredictDeployment.bind(model="tiiuae/falcon-7b",
+deployment = VLLMPredictDeployment.bind(model="tiiuae/falcon-7b-instruct",
                                             dtype="bfloat16",
                                             trust_remote_code=True,
                                             )

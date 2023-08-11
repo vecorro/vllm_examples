@@ -23,13 +23,20 @@ kubectl create clusterrolebinding default-tkg-admin-privileged-binding --cluster
 helm repo add kuberay https://ray-project.github.io/kuberay-helm/
 
 # Install both CRDs and KubeRay operator v0.6.0.
-helm install kuberay-operator kuberay/kuberay-operator --version 0.6.0
+helm install kuberay-operator kuberay/kuberay-operator --version 0.6.0 --create-namespace
 
-# Check the KubeRay operator pod in the `default` namespace.
-kubectl get pods
+# NAME: kuberay-operator
+# LAST DEPLOYED: Thu Aug 10 12:41:07 2023
+# NAMESPACE: kuberay
+# STATUS: deployed
+# REVISION: 1
+# TEST SUITE: None
 
+# Check the KubeRay operator pod in the `kuberay` namespace.
+kubectl get pods -n kuberay
 # NAME                                READY   STATUS    RESTARTS   AGE
-# kuberay-operator-6fcbb94f64-mbfnr   1/1     Running   0          17s
+# kuberay-operator-6b68b5b49d-jppm7   1/1     Running   0          6m40s
+
 ````
 - Pull the Ray Serve manifest from GitHub and apply it.
 ````
@@ -38,36 +45,40 @@ wget -L https://raw.githubusercontent.com/vecorro/vllm_examples/main/ray-service
 
 # Create a Ray Serve cluster using the manifest
 
-kubectl apply -f ray-service.vllm.yaml
+kubectl apply -f ray-service.vllm.yaml -n kuberay
+
+kubectl get pods -n kuberay
 
 # The Ray cluster starts to create the head and worker pods
-
-kubectl get pods
-
 # NAME                                           READY   STATUS              RESTARTS   AGE
-# kuberay-operator-6b68b5b49d-tvgpg              1/1     Running             0          40h
-# vllm-raycluster-ksl9p-head-9q6dx               0/1     ContainerCreating   0          1s
-# vllm-raycluster-ksl9p-worker-gpu-group-xnxck   0/1     Init:0/1            0          1s
+# kuberay-operator-6b68b5b49d-jppm7              1/1     Running             0          23m
+# vllm-raycluster-c9wk4-head-gw958               0/1     ContainerCreating   0          67s
+# vllm-raycluster-c9wk4-worker-gpu-group-wl7k2   0/1     Init:0/1            0          67s
 
 # After several minutes, the Ray cluster should be up and running
 
-kubectl get pods
+kubectl get pods -n kuberay
 
 # NAME                                           READY   STATUS    RESTARTS   AGE
-# kuberay-operator-6b68b5b49d-tvgpg              1/1     Running   0          40h
-# vllm-raycluster-ksl9p-head-9q6dx               1/1     Running   0          14s
-# vllm-raycluster-ksl9p-worker-gpu-group-xnxck   1/1     Running   0          14s
+# kuberay-operator-6b68b5b49d-jppm7              1/1     Running   0          39m
+# vllm-raycluster-c9wk4-head-gw958               1/1     Running   0          17m
+# vllm-raycluster-c9wk4-worker-gpu-group-wl7k2   1/1     Running   0          17m
 
 # The vLLM service will get exposed as a LoadBalancer. In the next example
-# the vLLM API service gets exposed over http://172.29.214.16:8000. That is the URL you
-# need to use to make prompt completion requests.
+# the vLLM API service (vllm-serve-svc) gets exposed over http://172.29.214.16:8000.
+# That is the URL you need to use to make prompt completion requests.
 
-kubectl get svc
+ kubectl get svc -n kuberay
+# NAME                             TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)
+# kuberay-operator                 ClusterIP      10.105.14.110    <none>          8080/TCP
+# vllm-head-svc                    LoadBalancer   10.100.208.111   172.29.214.17   10001:32103/TCP,8265:32233/TCP... 
+# vllm-raycluster-c9wk4-head-svc   LoadBalancer   10.103.27.23     172.29.214.16   10001:30474/TCP,8265:30563/TCP...
+# vllm-serve-svc                   LoadBalancer   10.104.242.187   172.29.214.18   8000:30653/TCP...
 
-# NAME                             TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                                                                                       AGE
-# kuberay-operator                 ClusterIP      10.108.37.47    <none>          8080/TCP                                                                                      2d14h
-# vllm-raycluster-vphmv-head-svc   LoadBalancer   10.110.93.143   172.29.214.16   10001:30859/TCP,8265:30939/TCP,52365:32230/TCP,6379:31806/TCP,8080:31088/TCP,8000:31758/TCP   18m
 ````
+- You can use the vllm-raycluster-c9wk4-head-svc IP on port 8265 (http://172.29.214.16:8265) to access the<br>
+Ray cluster dashboard to monitor the Ray cluster status and activity.
+
 
 - The `ray-service.vllm.yaml` manifest has a section that defines the vLLM service deployment:
 ````
@@ -84,10 +95,28 @@ spec:
 ````
 - Here some remarks about the service definition:
     - We increased `serviceUnhealthySecondThreshold` and `deploymentUnhealthySecondThreshold` to give Ray sufficient time
-  to install vLLM on a virtual working environment. vLLM can take >15 minutes to install.
+  to install vLLM on a virtual working environment. The vLLM service can take >15 minutes to install mainly because downloading
+  an LLM from the Hugging Face repo could take a long time.
     - `working_dir`is set to the URL of the compressed version of this Github repo. Ray will use this URL to pull the Python
   code that implements the vLLM service.
     - We use vLLM 0.1.3 to create the Ray working env.
     - `import_path` is set to the proper `module:object` for Ray Serve to get the service definition. In this case <br>
   the `module` is the `vllm_falcon_7b.py` Python script and `deployment` is a `serve.deployment.bind()`<br>
   object type defined inside that script.
+
+
+- Next you can run the `gradio_webserver.py` script to serve prompt completions from a web UI. 
+The command line instructions go like this this:
+
+```
+# Install gradio
+pip install gradio
+
+# Replace the --model-url value with the hostname or IP address of vllm-serve-svc
+python gradio_webserver.py --model-url="http://172.29.214.18:8000"
+
+# Running on local URL:  http://localhost:8001
+```
+
+Then you open URL `http://localhost:8001` from your web browser and the Gradio web interface will 
+give you a chat window to interact with the LLM.
