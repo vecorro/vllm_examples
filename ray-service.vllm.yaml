@@ -3,8 +3,8 @@ kind: RayService
 metadata:
   name: vllm
 spec:
-  serviceUnhealthySecondThreshold: 3600 # Config for the health check threshold for service. Default value is 60.
-  deploymentUnhealthySecondThreshold: 3600 # Config for the health check threshold for deployments. Default value is 60.
+  serviceUnhealthySecondThreshold: 1800 # Config for the health check threshold for service. Default value is 60.
+  deploymentUnhealthySecondThreshold: 1800 # Config for the health check threshold for deployments. Default value is 60.
   serveConfigV2: |
     applications:
       - name: vllm
