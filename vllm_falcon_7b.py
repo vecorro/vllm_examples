@@ -9,7 +9,6 @@ https://github.com/ray-project/ray/blob\
 
 import json
 from typing import AsyncGenerator
-
 from fastapi import BackgroundTasks
 from starlette.requests import Request
 from starlette.responses import StreamingResponse, Response
