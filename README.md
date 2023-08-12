@@ -27,13 +27,14 @@ helm install kuberay-operator kuberay/kuberay-operator --version 0.6.0 --create-
 
 # NAME: kuberay-operator
 # LAST DEPLOYED: Thu Aug 10 12:41:07 2023
-# NAMESPACE: kuberay
+# NAMESPACE: default
 # STATUS: deployed
 # REVISION: 1
 # TEST SUITE: None
 
 # Check the KubeRay operator pod in the `default` namespace.
 kubectl get pods
+
 # NAME                                READY   STATUS    RESTARTS   AGE
 # kuberay-operator-6b68b5b49d-jppm7   1/1     Running   0          6m40s
 
