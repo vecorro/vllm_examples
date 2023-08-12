@@ -13,7 +13,7 @@ def http_bot(prompt):
         "max_tokens": 200,
         "temperature": 0,
         "n": 1,
-        "stop": ">",
+        "stop": ">",  # Stop generation character
     }
     response = requests.post(args.model_url,
                              headers=headers,
