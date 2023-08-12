@@ -32,8 +32,8 @@ helm install kuberay-operator kuberay/kuberay-operator --version 0.6.0 --create-
 # REVISION: 1
 # TEST SUITE: None
 
-# Check the KubeRay operator pod in the `kuberay` namespace.
-kubectl get pods -n kuberay
+# Check the KubeRay operator pod in the `default` namespace.
+kubectl get pods
 # NAME                                READY   STATUS    RESTARTS   AGE
 # kuberay-operator-6b68b5b49d-jppm7   1/1     Running   0          6m40s
 
@@ -45,9 +45,9 @@ wget -L https://raw.githubusercontent.com/vecorro/vllm_examples/main/ray-service
 
 # Create a Ray Serve cluster using the manifest
 
-kubectl apply -f ray-service.vllm.yaml -n kuberay
+kubectl apply -f ray-service.vllm.yaml
 
-kubectl get pods -n kuberay
+kubectl get pods
 
 # The Ray cluster starts to create the head and worker pods
 # NAME                                           READY   STATUS              RESTARTS   AGE
@@ -57,7 +57,7 @@ kubectl get pods -n kuberay
 
 # After several minutes, the Ray cluster should be up and running
 
-kubectl get pods -n kuberay
+kubectl get pods
 
 # NAME                                           READY   STATUS    RESTARTS   AGE
 # kuberay-operator-6b68b5b49d-jppm7              1/1     Running   0          39m
@@ -68,7 +68,7 @@ kubectl get pods -n kuberay
 # the vLLM API service (vllm-serve-svc) gets exposed over http://172.29.214.16:8000.
 # That is the URL you need to use to make prompt completion requests.
 
- kubectl get svc -n kuberay
+ kubectl get svc
 # NAME                             TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)
 # kuberay-operator                 ClusterIP      10.105.14.110    <none>          8080/TCP
 # vllm-head-svc                    LoadBalancer   10.100.208.111   172.29.214.17   10001:32103/TCP,8265:32233/TCP... 
