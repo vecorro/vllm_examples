@@ -1,4 +1,4 @@
-#  A set of scripts that provide examples about serving LLMs using vLLM deployed on Ray Serve.
+#  Serving LLMs using vLLM deployed on Ray Serve.
 
 ### The scripts are based on the examples provided by the Anyscale team at <br> https://www.anyscale.com/blog/continuous-batching-llm-inference.
 
