@@ -1,9 +1,7 @@
 import argparse
 import json
-
 import gradio as gr
 import requests
-
 
 def http_bot(prompt):
     headers = {"User-Agent": "vLLM Client"}
