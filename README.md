@@ -1,6 +1,6 @@
 #  Serving LLMs using vLLM deployed on Ray Serve.
 
-### The scripts are based on the examples provided by the Anyscale team at <br> https://www.anyscale.com/blog/continuous-batching-llm-inference.
+### The scripts are based on the examples provided by the [Anyscale](https://www.anyscale.com/blog/continuous-batching-llm-inference) and [vLLM](https://github.com/vllm-project/vllm/tree/main/examples) teams.
 
 ## Requirements.
 
