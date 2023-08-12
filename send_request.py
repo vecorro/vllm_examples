@@ -16,6 +16,7 @@ If a family with num_adult adults and num_child children go to the movies, what'
 
 Write a Python function that returns the answer.
 """
+
 sample_input = {"prompt": prompt,
                 "stream": False,
                 "max_tokens": 200,
